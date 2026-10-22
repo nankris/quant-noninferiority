@@ -6,7 +6,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from datasets import load_dataset, Dataset
 from huggingface_hub import snapshot_download
-ROOT=pathlib.Path('/content/exp044b'); R=ROOT/'results'; R.mkdir(exist_ok=True)
+ROOT=pathlib.Path('/content/quant-noninferiority'); R=ROOT/'results'; R.mkdir(exist_ok=True)
 MODEL='Qwen/Qwen3-8B'
 REVISION='b968826d9c46dd6066d109eabc6255188de91218'
 torch.set_num_threads(4)
@@ -72,7 +72,7 @@ def main(method):
             wrapper.quantize(calib,batch_size=1)
             torch.cuda.synchronize(); meta['quant_seconds']=time.perf_counter()-start;meta['quant_peak_gib']=torch.cuda.max_memory_allocated()/2**30
             dump(meta_path,meta); wrapper.save(str(out)); tok.save_pretrained(out)
-            if os.environ.get('EXP044_QUANT_ONLY')=='1':
+            if os.environ.get('QUANT_ONLY')=='1':
                 meta['model_bytes']=sum(p.stat().st_size for p in out.rglob('*') if p.is_file());dump(meta_path,meta);return
             # Offloaded quantization leaves meta tensors; reload the saved checkpoint for inference.
             del wrapper
@@ -93,7 +93,7 @@ def main(method):
             torch.cuda.synchronize(); meta['quant_seconds']=time.perf_counter()-start;meta['quant_peak_gib']=torch.cuda.max_memory_allocated()/2**30
             dump(meta_path,meta)
             model.save_pretrained(out,save_compressed=True);tok.save_pretrained(out)
-            if os.environ.get('EXP044_QUANT_ONLY')=='1':
+            if os.environ.get('QUANT_ONLY')=='1':
                 meta['model_bytes']=sum(p.stat().st_size for p in out.rglob('*') if p.is_file());dump(meta_path,meta);return
             # Reload the packed saved model, rather than evaluate fake-quant weights.
             del model
@@ -102,7 +102,7 @@ def main(method):
         meta['model_bytes']=sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
     model.eval(); meta['backend_modules']=sorted(set(type(m).__module__+'.'+type(m).__name__ for m in model.modules() if any(k in type(m).__name__.lower() for k in ['quant','hqq','compressed'])))
     dump(meta_path,meta)
-    if os.environ.get('EXP044_QUANT_ONLY')=='1':
+    if os.environ.get('QUANT_ONLY')=='1':
         print('QUANTIZATION_CHECKPOINT_COMPLETE',method,flush=True);return
     torch.cuda.reset_peak_memory_stats(); eval_start=time.perf_counter()
     predpath=R/f'{method}_predictions.json'; preds=json.loads(predpath.read_text()) if predpath.exists() else []

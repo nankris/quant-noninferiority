@@ -1,6 +1,6 @@
 """Run detached on the dedicated VM; stage checkpoints survive driver restarts."""
 import subprocess,time,pathlib,json,os,traceback
-root=pathlib.Path('/content/exp044b');os.chdir(root);r=root/'results'
+root=pathlib.Path('/content/quant-noninferiority');os.chdir(root);r=root/'results'
 start=time.time();deadline=start+5.6*3600  # 8.624 CU at 1.54/h; independent watchdog includes setup.
 for method in ['bf16','gptq','awq','hqq']:
     if (r/f'{method}_done.json').exists():continue
@@ -11,8 +11,8 @@ for method in ['bf16','gptq','awq','hqq']:
         if (r/'STOP').exists():raise SystemExit('STOP requested')
         print('START',method,stage,time.time(),flush=True)
         env=dict(os.environ)
-        if stage=='quantize':env['EXP044_QUANT_ONLY']='1'
-        else:env.pop('EXP044_QUANT_ONLY',None)
+        if stage=='quantize':env['QUANT_ONLY']='1'
+        else:env.pop('QUANT_ONLY',None)
         begin=time.time()
         with open(r/f'{method}_{stage}.log','a') as log:
             p=subprocess.run(['python','-u','run.py',method],stdout=log,stderr=subprocess.STDOUT,env=env,timeout=max(1,deadline-time.time()))

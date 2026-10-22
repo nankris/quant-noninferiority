@@ -1,4 +1,4 @@
-Experiment 044b — session b7-044b only
+Quantization non-inferiority — session quant-noninferiority only
 Saved nvidia-smi output:
 Sat Oct 17 17:21:46 2026       
 +-----------------------------------------------------------------------------------------+
@@ -58,7 +58,7 @@ Per-item checkpoint count (awq): 15214
 {"method": "hqq", "source_revision": "b968826d9c46dd6066d109eabc6255188de91218", "quant_seconds": 41.23268330399969, "model_bytes": 6191602118, "tokens_per_second": 2.3878005976709433, "generation_seconds": [53.60769607700058, 53.60427760899984, 53.60547496300023], "eval_seconds": 1340.1388881049998, "accuracy": 0.7036282371499935, "finished_time": 1792262769.675138, "inference_linear_module_types": ["hqq.core.quantize.HQQLinear", "torch.nn.modules.linear.Linear"]}
 Per-item checkpoint count (hqq): 15214
 CLI stop confirmation:
-[colab] Stopping session 'b7-044b'...
+[colab] Stopping session 'quant-noninferiority'...
 [colab] Session terminated.
 
 Final timing and CU estimation:
@@ -71,7 +71,7 @@ Final timing and CU estimation:
   },
   "start_ist": "2026-10-17T22:44:41.102542+05:30",
   "gpu": "NVIDIA L4 (23,034 MiB)",
-  "experiment": "044b",
+  "experiment": "quant-noninferiority",
   "end_ist": "2026-10-18T00:18:28.301781+05:30",
   "actual_minutes": 93.78665398359298,
   "per_stage_minutes": {

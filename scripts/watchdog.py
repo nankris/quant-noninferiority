@@ -1,6 +1,6 @@
 """Detached budget backstop on this Colab VM; affects only its own runtime."""
 import os,time,json,pathlib,urllib.request,tarfile
-root=pathlib.Path('/content/exp044b');r=root/'results'
+root=pathlib.Path('/content/quant-noninferiority');r=root/'results'
 cfg=json.loads((root/'budget.json').read_text());deadline=cfg['deadline_unix']
 (r/'watchdog_started.json').write_text(json.dumps({'started':time.time(),'deadline':deadline,'max_planned_cu':8.855,'runtime_management_service_available':bool(os.environ.get('TBE_RUNTIME_ADDR'))},indent=2))
 print('WATCHDOG_READY',deadline,flush=True)

@@ -1,6 +1,3 @@
 # Release assets
 
-Large artifacts excluded from git (to be uploaded as release v1-data):
-
-| path | size |
-|---|---|
+Large model weights are excluded from git. Reproduce them from the pinned source and frozen calibration inputs described in [README.md](README.md).

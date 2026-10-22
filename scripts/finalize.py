@@ -1,4 +1,4 @@
-"""Finalize wall-clock accounting after stopping b7-044b, before final commit."""
+"""Finalize wall-clock accounting after stopping quant-noninferiority."""
 import json,datetime,pathlib,time
 r=pathlib.Path('results');t=json.loads((r/'timing.json').read_text());e=json.loads((r/'resource_end.json').read_text())
 start=datetime.datetime.fromisoformat(t['start_ist']).timestamp();end=time.time();stop=e['stop_unix'];stages=[json.loads(x) for x in (r/'stage_times.jsonl').read_text().splitlines() if x.strip()]

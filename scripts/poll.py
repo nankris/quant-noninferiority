@@ -1,6 +1,6 @@
 import pathlib,subprocess,tarfile,json,time,re,shutil,io
-root=pathlib.Path('/content/exp044b');r=root/'results'
-print(subprocess.getoutput("ps -eo pid,etime,args | grep -E 'driver.py|run.py|install044|watchdog' | grep -v grep"))
+root=pathlib.Path('/content/quant-noninferiority');r=root/'results'
+print(subprocess.getoutput("ps -eo pid,etime,args | grep -E 'driver.py|run.py|install|watchdog' | grep -v grep"))
 print(subprocess.getoutput('nvidia-smi --query-gpu=name,memory.used,utilization.gpu --format=csv'))
 for method in ['bf16','gptq','awq','hqq']:
  done=r/f'{method}_done.json'
@@ -11,11 +11,11 @@ for method in ['bf16','gptq','awq','hqq']:
   if p.exists():
    text=p.read_text(errors='replace');layers=re.findall(r'HessianInputDedup:.*',text)
    print(method,stage,'\n',layers[-1] if layers else '\n'.join(text.splitlines()[-2:])[-700:])
-if pathlib.Path('/content/bootstrap044b.log').exists():shutil.copyfile('/content/bootstrap044b.log',r/'driver.log')
+if pathlib.Path('/content/bootstrap-quant.log').exists():shutil.copyfile('/content/bootstrap-quant.log',r/'driver.log')
 for p in (root/'models').glob('*/*.json'):
  if p.stat().st_size<1000000:
   target=r/'model_configs'/p.parent.name/p.name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,target)
-(r/'collection.json').write_text(json.dumps({'collected_unix':time.time(),'session':'b7-044b'}))
+(r/'collection.json').write_text(json.dumps({'collected_unix':time.time(),'session':'quant-noninferiority'}))
 with tarfile.open(root/'checkpoint.tar.gz.tmp','w:gz') as tar:
  for p in r.rglob('*'):
   if p.is_file() and not p.name.endswith('.tmp'):

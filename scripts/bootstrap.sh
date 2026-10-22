@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -eu
-mkdir -p /content/exp044b
-cd /content/exp044b
-tar -xzf /content/bundle044b.tar.gz
+mkdir -p /content/quant-noninferiority
+cd /content/quant-noninferiority
+tar -xzf /content/bundle-quant.tar.gz
 cp scripts/*.py scripts/install.sh .
 mkdir -p results
 nvidia-smi > results/nvidia_smi.txt
